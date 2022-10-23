@@ -1,4 +1,4 @@
-import { Guide } from "./guide_model";
+import { Guide } from "./guide_model.js";
 import { generate } from "generate-password";
 
 const createGuide = async (req, res) => {

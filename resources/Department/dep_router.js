@@ -5,7 +5,7 @@ import {
   getSingleDepartment,
   updateDepartment,
   deleteDepartment,
-} from "./dep_controller";
+} from "./dep_controller.js";
 
 const router = Router();
 
