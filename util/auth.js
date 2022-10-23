@@ -1,5 +1,5 @@
 import { newToken, verifyToken } from "./jwt.js";
-import { User } from "../resources/user/user_model";
+import { User } from "../resources/user/user_model.js";
 
 const adminSignUp = async (req, res) => {
   const Model = req.model;
