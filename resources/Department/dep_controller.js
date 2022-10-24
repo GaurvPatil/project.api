@@ -53,39 +53,48 @@ const getAllDepartments = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Unable to fetch." });
+    return res.status(500).json({
+      message: "Error Communicating with server",
+      status: "server error",
+    });
   }
 };
 
 const getSingleDepartment = async (req, res) => {
   const Model = Department;
-  if (!req.user) return res.status(400).json({ message: "User not found." });
+  if (!req.user)
+    return res
+      .status(400)
+      .json({ status: "failed", message: "User not found." });
   try {
     const Department = await Model.findById(req.params.id);
     if (!Department) {
-      return res.status(400).json({ message: "Not found" });
+      return res.status(400).json({ status: "failed", message: "Not found" });
     }
     res.status(200).json({ status: "OK", data: Department });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Unable to find" });
+    return res.status(500).json({
+      message: "Error Communicating with server",
+      status: "server error",
+    });
   }
 };
 
 const updateDepartment = async (req, res) => {
   const Model = Department;
-  if (!req.user) return res.status(400).json({ message: "User not found." });
-  if (!req.body.departmentName) {
-    return res.status(400).send({
-      message: "Department name is required",
-    });
-  }
 
+  if (!req.user)
+    return res
+      .status(400)
+      .json({ status: "failed", message: "User not found." });
   let Dep = await Model.findById(req.params.id);
-
   if (!Dep) {
     return res.status(400).json({ status: "failed", message: "Not found" });
   }
+
+
+console.log(req.body , "body")
 
   try {
     Dep = await Model.findByIdAndUpdate(req.params.id, req.body, {
@@ -94,7 +103,10 @@ const updateDepartment = async (req, res) => {
     res.status(200).json({ status: "OK", data: Dep });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Unable to update." });
+    return res.status(500).json({
+      message: "Error Communicating with server",
+      status: "server error",
+    });
   }
 };
 
@@ -111,7 +123,10 @@ const deleteDepartment = async (req, res) => {
     res.status(200).json({ status: "OK", message: "Deleted Successfully" });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Unable to delete" });
+    return res.status(500).json({
+      message: "Error Communicating with server",
+      status: "server error",
+    });
   }
 };
 
