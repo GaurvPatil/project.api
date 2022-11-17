@@ -12,6 +12,9 @@ const GuideSchema = new Schema(
       type: String,
       required: true,
     },
+
+    students: [{ type: mongoose.Schema.ObjectId, ref: "students" }],
+
     password: {
       type: String,
       trim: true,
@@ -23,10 +26,11 @@ const GuideSchema = new Schema(
       default: "guide",
     },
 
-    //   department: {
-    //     type: String,
-    //     required: true,
-    //   },
+    department: {
+      type: mongoose.Schema.ObjectId,
+      ref: "departments",
+      required: true,
+    },
 
     approved: {
       type: Boolean,
@@ -46,11 +50,11 @@ const GuideSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-      createdBy: {
-        type: mongoose.Schema.ObjectId,
-        ref: "users",
-        required: true,
-      },
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "users",
+      required: true,
+    },
   },
   { timestamps: true }
 );

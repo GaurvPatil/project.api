@@ -40,7 +40,7 @@ const createDepartment = async (req, res) => {
 
 const getAllDepartments = async (req, res) => {
   const Model = Department;
-  if (!req.user) return res.status(400).json({ message: "User not found." });
+  if (!req.user) return res.status(400).json({ status: "failed", message: "User not found." });;
   try {
     const AllDepartments = await Model.find({ createdBy: req.user._id });
     const totalRecords = await Model.countDocuments({});

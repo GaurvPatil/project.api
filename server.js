@@ -43,6 +43,10 @@ import { adminSignUp, adminSignin, adminProtect } from "./util/auth.js";
 import GuideRouter from "./resources/Guide/guide_router.js";
 import DepartmentRouter from "./resources/Department/dep_router.js";
 
+
+// helper 
+import { getDashBoardCount } from "./resources/Helper/helper_controller.js";
+
 export const userModel = (req, res, next) => {
   req.model = User;
   next();
@@ -55,6 +59,12 @@ app.post("/admin-signin", userModel, adminSignin);
 // routes
 app.use("/api/guide", GuideRouter);
 app.use("/api/department", adminProtect, DepartmentRouter);
+
+
+
+// helper 
+app.get("/api/getdashboardcount" , adminProtect , getDashBoardCount)
+
 
 export const start = async () => {
   try {

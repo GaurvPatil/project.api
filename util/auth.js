@@ -1,5 +1,6 @@
 import { newToken, verifyToken } from "./jwt.js";
 import { User } from "../resources/user/user_model.js";
+import { Guide } from "../resources/Guide/guide_model.js";
 
 const adminSignUp = async (req, res) => {
   const Model = req.model;
@@ -55,12 +56,10 @@ const adminSignin = async (req, res) => {
         .send({ status: "failed", message: "Invalid Email or Password" });
     }
     if (!user.approved) {
-      return res
-        .status(401)
-        .send({
-          status: "failed",
-          message: "Please contact admin to approve ur account",
-        });
+      return res.status(401).send({
+        status: "failed",
+        message: "Please contact admin to approve ur account",
+      });
     }
     const token = newToken(user);
     return res
@@ -75,18 +74,15 @@ const adminSignin = async (req, res) => {
 const adminProtect = async (req, res, next) => {
   const Model = User;
 
- 
   if (!req.headers.authorization) {
     return res.status(401).send({ message: "User not authorized" });
   }
   let token = req.headers.authorization.split("Bearer ")[1];
-
-
+  
   if (!token) {
     return res.status(401).send({ message: "Token not found" });
   }
   try {
-   
     const payload = await verifyToken(token);
 
     const user = await Model.findById(payload.id)
@@ -94,7 +90,7 @@ const adminProtect = async (req, res, next) => {
       .lean()
       .exec();
     req.user = user;
- 
+    
     next();
   } catch (e) {
     console.log(e);
@@ -102,4 +98,31 @@ const adminProtect = async (req, res, next) => {
   }
 };
 
-export { adminSignUp, adminSignin, adminProtect };
+const guideProtect = async (req, res, next) => {
+  const Model = Guide;
+
+  if (!req.headers.authorization) {
+    return res.status(401).send({ message: "Guide not authorized" });
+  }
+  let token = req.headers.authorization.split("Bearer ")[1];
+
+  if (!token) {
+    return res.status(401).send({ message: "Token not found" });
+  }
+  try {
+    const payload = await verifyToken(token);
+
+    const guide = await Model.findById(payload.id)
+      .select("-password")
+      .lean()
+      .exec();
+    req.guide = guide;
+
+    next();
+  } catch (e) {
+    console.log(e);
+    return res.status(401).send({ message: "Not Authorized" });
+  }
+};
+
+export { adminSignUp, adminSignin, adminProtect, guideProtect };
